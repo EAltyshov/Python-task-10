@@ -1,28 +1,14 @@
-from typing import Union
-
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, Query
+from schemas import Request, Word
+from typing import List
+import collections
 
 app = FastAPI()
 
-
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
-
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
-
-@app.put("/items/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
-#коммент
+@app.post('/request')
+def post_name(list1: List[str] = Query([])):
+    list2 = [item for item, count in collections.Counter(list1).items() if count > 1]
+    list3 = [x.lower() for x in list1]
+    list4 = [x.lower() for x in list2]
+    result = list(set(list3) ^ set(list4))
+    return result
