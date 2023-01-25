@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Query, UploadFile, HTTPException, File
 from typing import List
-import collections, os, os.path
+import collections, os, os.path, shutil
 from fastapi.responses import FileResponse
 import schemas
 
@@ -27,6 +27,8 @@ def accumulate_files(files: list[UploadFile], filename: str):
 
 
 
+
+
 @app.post("/load/{filename}")
 def load_file(filename: str):
     path = os.path.join('data/', filename)
@@ -35,7 +37,7 @@ def load_file(filename: str):
     else:
         raise HTTPException(status_code=404, detail="file not found: " + filename)
 
-@app.post("/upload/<file_name>")
+@app.post("/upload1/<file_name>")
 def upload_file(file: UploadFile = File(...)):
     error_files = "Wrong format: .csv, .json"
     if file.filename.endswith((".csv", ".json")):
