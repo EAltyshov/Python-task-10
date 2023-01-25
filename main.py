@@ -14,6 +14,7 @@ def family(list1: List[str] = Query([])):
     list4 = [x.lower() for x in list2]
     result = list(set(list3) ^ set(list4))
     return result
+
 @app.post("/upload/{filename}")
 def accumulate_files(files: list[UploadFile], filename: str):
     error_files = []
@@ -25,10 +26,6 @@ def accumulate_files(files: list[UploadFile], filename: str):
     schemas.accum_files(files, filename)
     return {"filename": filename}
 
-
-
-
-
 @app.post("/load/{filename}")
 def load_file(filename: str):
     path = os.path.join('data/', filename)
@@ -37,7 +34,7 @@ def load_file(filename: str):
     else:
         raise HTTPException(status_code=404, detail="file not found: " + filename)
 
-@app.post("/upload1/<file_name>")
+@app.post("/upload1/<filename>")
 def upload_file(file: UploadFile = File(...)):
     error_files = "Wrong format: .csv, .json"
     if file.filename.endswith((".csv", ".json")):
